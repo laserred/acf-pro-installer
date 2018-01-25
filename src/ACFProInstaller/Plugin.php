@@ -123,6 +123,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * Add the key from the environment to the event url
      *
+     * Get the constant file from our theme directory
+     *
      * The key is not added to the package because it would show up in the
      * composer.lock file in this case. A custom file system is used to
      * swap out the ACF PRO url with a url that contains the key.
@@ -133,15 +135,20 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      */
     public function addKey(PreFileDownloadEvent $event)
     {
+        $acfConstantFile = dirname(dirname(__FILE__, 5))."/includes/functions/acf-constants.php";
+        if ( file_exists($acfConstantFile) ) {
+          require_once($acfConstantFile);
+        }
+
         $processedUrl = $event->getProcessedUrl();
 
-        if ($this->isAcfProPackageUrl($processedUrl)) {
+        if (defined('ACF_PRO_KEY') && $this->isAcfProPackageUrl($processedUrl)) {
             $rfs = $event->getRemoteFilesystem();
             $acfRfs = new RemoteFilesystem(
                 $this->addParameterToUrl(
                     $processedUrl,
                     'k',
-                    $this->getKeyFromEnv()
+                    ACF_PRO_KEY
                 ),
                 $this->io,
                 $this->composer->getConfig(),
