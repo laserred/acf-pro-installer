@@ -135,7 +135,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      */
     public function addKey(PreFileDownloadEvent $event)
     {
-        $acfConstantFile = dirname(dirname(__FILE__, 5))."/includes/functions/acf-constants.php";
+        $acfConstantFile = dirname(dirname(__FILE__, 5))."/includes/acf/constant.php";
         if ( file_exists($acfConstantFile) ) {
           require_once($acfConstantFile);
         }
