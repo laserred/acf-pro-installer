@@ -120,6 +120,15 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     }
 
 
+    public function dirname_r($path, $count = 1){
+        if ($count > 1){
+           return dirname(dirname_r($path, --$count));
+        }else{
+           return dirname($path);
+        }
+    }
+
+
     /**
      * Add the key from the environment to the event url
      *
@@ -135,7 +144,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      */
     public function addKey(PreFileDownloadEvent $event)
     {
-        $acfConstantFile = dirname(dirname(__FILE__, 5))."/includes/acf/constant.php";
+        $acfConstantFile = dirname($this->dirname_r(__FILE__, 5))."/includes/acf/constant.php";
         if ( file_exists($acfConstantFile) ) {
           require_once($acfConstantFile);
         }
