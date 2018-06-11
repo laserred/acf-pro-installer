@@ -122,7 +122,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function dirname_r($path, $count = 1){
         if ($count > 1){
-           return dirname(dirname_r($path, --$count));
+           return dirname($this->dirname_r($path, --$count));
         }else{
            return dirname($path);
         }
